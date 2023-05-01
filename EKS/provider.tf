@@ -7,8 +7,8 @@ terraform {
     }
   }
   backend "s3" {
-    bucket  = "tick-terraform-state-bucket"
-    key     = "EKS-Tick-State-Bucket/terraform.tfstate"
+    bucket  = "test-c360-dev-terraform"
+    key     = "eks/terraform.tfstate"
     encrypt = true
     region  = "us-west-2"
     profile = "default"
