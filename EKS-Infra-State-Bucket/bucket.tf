@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "c360-dev-terraform"
+    bucket = "test-c360-dev-terraform"
     key    = "s3/terraform.tfstate"
     region = "us-west-2"
   }
@@ -20,7 +20,7 @@ provider "aws" {
 
 # Create S3 bucket to hold the terraform state files
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "c360-dev-terraform"
+  bucket = "test-c360-dev-terraform"
 
   tags = {
     Category    = "360_Core"
