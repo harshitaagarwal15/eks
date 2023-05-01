@@ -47,10 +47,18 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_wrapper: false
-      - name: Terraform Apply
+      - name: Terraform EKS Apply
         id:   apply
         run: |
           cd EKS/
+          terraform init
+          terraform validate
+          terraform plan 
+          terraform apply --auto-approve
+      - name: Terraform ECR Apply
+        id:   apply
+        run: |
+          cd ECR/
           terraform init
           terraform validate
           terraform plan 
