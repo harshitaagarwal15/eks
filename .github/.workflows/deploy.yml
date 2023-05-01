@@ -1,5 +1,7 @@
 name: Provision t3.micro EC2
 on:
+  push:
+    branches: [ "ec2" ]
   workflow_dispatch:
     inputs:
       ec2-name:
