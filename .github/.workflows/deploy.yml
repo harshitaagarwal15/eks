@@ -30,7 +30,7 @@ jobs:
       - name: Terraform Apply
         id:   apply
         env:
-          TF_VAR_ec2_name:  "${{ github.event.inputs.ec2-name }}"
+          TF_VAR_ec2_name:  "test-ec2"
         run: |
           terraform init
           terraform validate
