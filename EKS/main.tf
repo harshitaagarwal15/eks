@@ -42,24 +42,24 @@ module "Worker" {
   depends_on      = [module.Cluster]
 }
 
-module "Components" {
-  source     = "./Components"
-  opid_arn   = module.Cluster.opid_arn
-  opid_url   = module.Cluster.opid_url
-  cluster_name = var.cluster_name
-  depends_on = [module.Cluster, module.Worker]
-}
+# module "Components" {
+#   source     = "./Components"
+#   opid_arn   = module.Cluster.opid_arn
+#   opid_url   = module.Cluster.opid_url
+#   cluster_name = var.cluster_name
+#   depends_on = [module.Cluster, module.Worker]
+# }
 
-output "load_balancer_service_account_role_arn" {
-  value = module.Components.load_balancer_arn
-}
-output "Cluster_autoscaller_service_account_role_arn" {
-  value = module.Components.cluster_autoscaller_arn
-  }
-output "efs_csi_driver_controller_role"{
-  value = module.Components.aws_efs_csi_controller_role_arn
-}
+# output "load_balancer_service_account_role_arn" {
+#   value = module.Components.load_balancer_arn
+# }
+# output "Cluster_autoscaller_service_account_role_arn" {
+#   value = module.Components.cluster_autoscaller_arn
+#   }
+# output "efs_csi_driver_controller_role"{
+#   value = module.Components.aws_efs_csi_controller_role_arn
+# }
 
-output "ebs_csi_driver_controller_role"{
-  value = module.Components.EBS_CSI_role_arn
-}
+# output "ebs_csi_driver_controller_role"{
+#   value = module.Components.EBS_CSI_role_arn
+# }
