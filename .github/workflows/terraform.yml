@@ -1,15 +1,9 @@
-name: Provision t3.micro EC2
+name: EKS Setup
 on:
   push:
     branches: [ "main" ]
   pull_request:
-  workflow_dispatch:
-    inputs:
-      ec2-name:
-        description: EC2 name
-        required: true
-        default: 'App Server'
-        type: string
+  
 jobs:
   provision-ec2:
     runs-on: ubuntu-latest
@@ -23,17 +17,17 @@ jobs:
         with:
           aws-access-key-id: '${{ secrets.TF_USER_AWS_KEY }}'
           aws-secret-access-key: '${{ secrets.TF_USER_AWS_SECRET }}'
-          aws-region: us-east-2
+          aws-region: us-west-2
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_wrapper: false
-      - name: Terraform Destroy
-        id:   destroy
-        env:
-          TF_VAR_ec2_name:  "${{ github.event.inputs.ec2-name }}"
+      - name: Terraform Apply
+        id:   apply
         run: |
+          cd EKS-Infra-State-Bucket/
           terraform init
           terraform validate
           terraform plan 
-          terraform destroy -auto-approve
+          terraform apply --auto-approve
+          
