@@ -1,48 +1,34 @@
 terraform {
-  required_version = "= 1.4.6"
+  backend "s3" {
+    bucket = "c360-dev-terraform"
+    key    = "s3/terraform.tfstate"
+    region = "us-west-2"
+  }
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 4.0"
     }
   }
-  backend "s3" {
-    bucket         = "eks-cluster-remote-state"
-    key            = "EKS-Infra-State-Bucket/terraform.tfstate"
-    encrypt        = true
-    region         = "us-west-2"
-  }
- }
+}
 
 # Configure the AWS Provider
 provider "aws" {
   region = "us-west-2"
 }
 
+# Create S3 bucket to hold the terraform state files
 resource "aws_s3_bucket" "terraform_state" {
-  bucket = "eks-cluster-remote-state"
-
-  lifecycle {
-    prevent_destroy = true
-  }
+  bucket = "c360-dev-terraform"
 
   tags = {
-    Name        = "eks-cluster-remote-state"
-    Environment = "dev"
+    Category    = "360_Core"
+    SubCategory = "Innovation"
   }
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "encryption" {
-  bucket = aws_s3_bucket.terraform_state.bucket
-
-  rule {
-    apply_server_side_encryption_by_default {
-        sse_algorithm = "AES256"
-    }
-  }
-}
-
-resource "aws_s3_bucket_public_access_block" "security" {
+resource "aws_s3_bucket_public_access_block" "terraform_state_block_access" {
   bucket = aws_s3_bucket.terraform_state.id
 
   block_public_acls       = true
@@ -51,3 +37,12 @@ resource "aws_s3_bucket_public_access_block" "security" {
   restrict_public_buckets = true
 }
 
+resource "aws_s3_bucket_server_side_encryption_configuration" "terraform_state_encrypt" {
+  bucket = aws_s3_bucket.terraform_state.bucket
+
+  rule {
+    apply_server_side_encryption_by_default {
+      sse_algorithm = "aws:kms"
+    }
+  }
+}
